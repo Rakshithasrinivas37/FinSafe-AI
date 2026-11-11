@@ -34,7 +34,7 @@ jobs:
 
     - name: Run lint checks
       run: |
-        ruff check backend ai
+        ruff check .
 
     - name: Run unit tests
       run: |
