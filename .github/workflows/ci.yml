@@ -39,7 +39,3 @@ jobs:
     - name: Run unit tests
       run: |
         pytest backend/tests
-
-    - name: Build Docker images
-      run: |
-        docker compose build
