@@ -1,0 +1,32 @@
+name: FinSafe AI - CD
+
+on:
+  push:
+    branches:
+    - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    environment: production
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build production images
+      run: |
+        docker compose build
+    # Future steps:
+    # 1. Authenticate with GHCR
+    # 2. Push production images
+    # 3. Deploy to cloud VM
+    # 4. Run application health checks
