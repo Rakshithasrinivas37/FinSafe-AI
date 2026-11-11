@@ -38,4 +38,4 @@ jobs:
 
     - name: Run unit tests
       run: |
-        pytest backend/tests
+        python -m pytest backend/tests/ -v
