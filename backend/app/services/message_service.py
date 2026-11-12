@@ -3,6 +3,7 @@ from backend.app.services.indicator_service import (
     extract_sensitive_information_requests,
     extract_threat_indicators,
     extract_urgency_indicators,
+    extract_financial_transaction_requests
 )
 from backend.app.services.risk_assessment.risk_assessor import assess_risk
 
@@ -23,7 +24,16 @@ def analyze_message(request: MessageAnalysisRequest) -> MessageAnalysisResponse:
         request.message
     )
 
-    indicators = urgency_indicators + threat_indicators + sensitive_information_indicators
+    transaction_indicators = extract_financial_transaction_requests(
+        request.message
+    )
+
+    indicators = (
+        urgency_indicators 
+        + threat_indicators 
+        + sensitive_information_indicators
+        + transaction_indicators
+        )
 
     risk_assessment = assess_risk(indicators)
 

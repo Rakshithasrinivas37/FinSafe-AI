@@ -65,3 +65,22 @@ def test_message_exceeds_maximum_length():
     )
 
     assert response.status_code == 422
+
+def test_analyse_message_detects_financial_transaction_request():
+    response = client.post(
+        "/api/v1/analyse/message",
+        json={
+            "message": "Transfer $500 to this account to unlock your funds.",
+            "jurisdiction": "Singapore",
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+    categories = [
+        indicator["category"]
+        for indicator in data["indicators"]
+    ]
+
+    assert "transaction_request" in categories
