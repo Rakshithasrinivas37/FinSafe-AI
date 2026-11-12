@@ -151,3 +151,38 @@ def test_case_insensitive_sensitive_info_detection():
         "SEND YOUR OTP."
     )
     assert len(result) == 1
+
+
+def test_never_share_otp_is_not_a_request():
+    result = extract_sensitive_information_requests(
+        "Never share your OTP with anyone."
+    )
+    assert len(result) == 0
+
+
+def test_bank_never_asks_for_otp():
+    result = extract_sensitive_information_requests(
+        "Your bank will never ask you to share your OTP."
+    )
+    assert len(result) == 0
+
+
+def test_negation_does_not_suppress_later_request():
+    result = extract_sensitive_information_requests(
+        "Never share your OTP. Send your OTP to this number."
+    )
+    assert len(result) == 1
+
+
+def test_mixed_warning_and_request():
+    result = extract_sensitive_information_requests(
+        "Never share your OTP, but enter your OTP on this page."
+    )
+    assert len(result) == 1
+
+
+def test_positive_request_is_still_detected():
+    result = extract_sensitive_information_requests(
+        "Please share your OTP immediately."
+    )
+    assert len(result) == 1
