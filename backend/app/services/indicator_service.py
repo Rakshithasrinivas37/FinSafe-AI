@@ -4,14 +4,11 @@ from backend.app.schemas.indicators import DetectedIndicator
 from backend.app.services.patterns.negation import NEGATION_PATTERNS
 from backend.app.services.patterns.sensitive_requests import SENSITIVE_REQUEST_PATTERNS
 from backend.app.services.patterns.threats import THREAT_PATTERNS
+from backend.app.services.patterns.transactions import FINANCIAL_TRANSACTION_PATTERNS
 from backend.app.services.patterns.urgency import URGENCY_PATTERNS
-
 from backend.app.services.text_preprocessing.clause_splitter import split_into_clauses
 from backend.app.services.text_preprocessing.reference_resolver import (
     resolve_sensitive_references,
-)
-from backend.app.services.patterns.transactions import (
-    FINANCIAL_TRANSACTION_PATTERNS
 )
 
 EDUCATIONAL_CONTEXT_PATTERNS = [

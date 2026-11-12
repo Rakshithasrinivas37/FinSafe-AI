@@ -4,10 +4,10 @@ import csv
 from pathlib import Path
 
 from backend.app.services.indicator_service import (
+    extract_financial_transaction_requests,
     extract_sensitive_information_requests,
     extract_threat_indicators,
     extract_urgency_indicators,
-    extract_financial_transaction_requests
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

@@ -42,18 +42,12 @@ def assess_risk(
             "such as transferring money or making a payment."
         )
 
-    if has_sensitive_request:
-        risk_level = "high"
-
-    elif has_threat and (
+    if has_sensitive_request or has_threat and (
         has_urgency or has_financial_transaction
     ):
         risk_level = "high"
 
-    elif has_financial_transaction and has_urgency:
-        risk_level = "medium"
-
-    elif has_threat:
+    elif has_financial_transaction and has_urgency or has_threat:
         risk_level = "medium"
 
     elif has_urgency:
