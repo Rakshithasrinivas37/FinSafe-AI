@@ -76,6 +76,20 @@ if st.button("Analyse Message", type="primary"):
                 st.subheader("Message")
                 st.write(result.get("message", "No message returned."))
 
+                st.subheader("Detected Indicators")
+
+                indicators = result.get("indicators", [])
+
+                # Display indicators
+                if indicators:
+                    for indicator in indicators:
+                        st.warning(
+                            f"{indicator['category'].replace('_', ' ').title()}: "
+                            f"{indicator['matched_text']}"
+                        )
+                else:
+                    st.info("No urgency indicators detected.")
+
                 # Display analysis
                 st.subheader("Analysis")
                 st.write(result.get("analysis", "No analysis available."))

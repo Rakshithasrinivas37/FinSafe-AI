@@ -37,7 +37,7 @@ def test_message_analysis():
     )
 
     assert response.status_code == 200
-    assert response.json()["status"] == "pending_implementation"
+    assert response.json()["status"] == "completed"
 
 
 def test_empty_message():
