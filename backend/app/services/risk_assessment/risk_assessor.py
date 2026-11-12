@@ -1,12 +1,3 @@
-"""
-The responsibility of risk_assessor.py will be to:
-    1. Accept the detected indicators.
-    2. Evaluate their severity and combinations.
-    3. Determine a risk level.
-    4. Generate evidence-based explanations.
-    5. Return the assessment.
-"""
-
 
 from backend.app.schemas.indicators import DetectedIndicator
 from backend.app.schemas.risk import RiskAssessment
@@ -15,16 +6,17 @@ from backend.app.schemas.risk import RiskAssessment
 def assess_risk(
     indicators: list[DetectedIndicator],
 ) -> RiskAssessment:
-    """Assess message risk using detected indicators."""
 
     categories = {indicator.category for indicator in indicators}
-
     reasons = []
 
     has_urgency = "urgency" in categories
     has_threat = "threats" in categories
     has_sensitive_request = (
         "sensitive_information_request" in categories
+    )
+    has_financial_transaction = (
+        "transaction_request" in categories
     )
 
     if has_sensitive_request:
@@ -44,24 +36,25 @@ def assess_risk(
             "The message creates pressure to act quickly."
         )
 
-    # Rule 1: Requests for sensitive information
-    if has_sensitive_request or has_threat and has_urgency:
+    if has_financial_transaction:
+        reasons.append(
+            "The message requests a financial action "
+            "such as transferring money or making a payment."
+        )
+
+    if has_sensitive_request or has_threat and (
+        has_urgency or has_financial_transaction
+    ):
         risk_level = "high"
 
-    # Rule 3: Threat without urgency
-    elif has_threat:
+    elif has_financial_transaction and has_urgency or has_threat:
         risk_level = "medium"
 
-    # Rule 4: Urgency without other indicators
     elif has_urgency:
         risk_level = "low"
 
-    # Rule 5: No indicators detected
     else:
         risk_level = "low"
-        reasons.append(
-            "No known risk indicators were detected."
-        )
 
     if risk_level == "high":
         explanation = (
@@ -69,17 +62,35 @@ def assess_risk(
             "information request were detected. Verify the "
             "message independently before taking action."
         )
+
     elif risk_level == "medium":
         explanation = (
             "The message contains potentially concerning "
-            "language. Verify the claim through an official "
-            "channel before responding."
+            "language. Verify the request through an official "
+            "channel before making a payment or responding."
         )
+
+    elif has_financial_transaction:
+        explanation = (
+            "The message requests a financial transaction. "
+            "Verify the recipient and purpose independently "
+            "before transferring money or making a payment."
+        )
+
+    elif has_urgency:
+        explanation = (
+            "The message contains urgency-related language. "
+            "Take time to verify the request before acting."
+        )
+
     else:
         explanation = (
             "Few or no known risk indicators were detected. "
             "This does not guarantee that the message is safe."
         )
+
+    if not indicators:
+        reasons.append("No known risk indicators were detected.")
 
     return RiskAssessment(
         risk_level=risk_level,

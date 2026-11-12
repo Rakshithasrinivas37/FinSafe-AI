@@ -3,29 +3,41 @@ ADV01,"We need your OTP to verify your identity before releasing the refund.",su
 ADV02,"Never share your OTP with anyone, but enter your banking password on this page immediately.",suspicious,sensitive_information_request|urgency,complex_negation
 ADV03,"The text says 'send your PIN now'; this is an example of a phishing message.",benign,,reported_content
 ADV04,"I accidentally shared my CVV yesterday and contacted my bank.",benign,,incident_report
-ADV05,"If you fail to verify your account, access may be restricted.",suspicious,threat,conditional_threat
-ADV06,"Your account will be blocked unless you provide your PIN within 20 minutes.",suspicious,sensitive_information_request|threat|urgency,combined_indicators
+ADV05,"If you fail to verify your account, access may be restricted.",suspicious,threats,conditional_threats
+ADV06,"Your account will be blocked unless you provide your PIN within 20 minutes.",suspicious,sensitive_information_request|threats|urgency,combined_indicators
 ADV07,"Do not provide your password over the phone. Instead, enter it in this verification form.",suspicious,sensitive_information_request,negation_scope
 ADV08,"There is no need to respond right away; open your bank's official app to check the notification.",benign,,negated_urgency
 ADV09,"A scammer may ask you to reveal your banking password to steal your account.",benign,,educational_mention
-ADV10,"Your bank will never ask for your OTP. However, send it to our agent now or your payment may be frozen.",suspicious,sensitive_information_request|threat|urgency,mixed_intent
+ADV10,"Your bank will never ask for your OTP. However, send it to our agent now or your payment may be frozen.",suspicious,sensitive_information_request|threats|urgency,mixed_intent
 ADV11,"To unlock your account, we need you to enter your one-time password in the form below.",suspicious,sensitive_information_request,indirect_request
 ADV12,"Could you confirm your identity by sharing your online banking credentials?",suspicious,sensitive_information_request,polite_indirect_request
 ADV13,"Please do not share your OTP with callers; our verification page needs you to enter it now.",suspicious,sensitive_information_request|urgency,negation_scope
 ADV14,"Never reveal your CVV in a phone call. Send your CVV through this secure chat instead.",suspicious,sensitive_information_request,contrast_and_negation
 ADV15,"The scam message instructed me to provide my PIN, but I ignored it and reported the message.",benign,,reported_incident
 ADV16,"A training example might say, 'enter your password immediately'; never follow instructions like that.",benign,,quoted_educational_content
-ADV17,"Your access could be suspended if the verification process is not completed.",suspicious,threat,conditional_threat
-ADV18,"Unless you update your payment details, your card may be blocked.",suspicious,threat,conditional_threat
-ADV19,"Respond within 15 minutes or legal action may be taken against you.",suspicious,threat|urgency,threat_and_urgency
-ADV20,"Your payment will not be frozen if you ignore this unsolicited message.",benign,,negated_threat
+ADV17,"Your access could be suspended if the verification process is not completed.",suspicious,threats,conditional_threats
+ADV18,"Unless you update your payment details, your card may be blocked.",suspicious,threats,conditional_threats
+ADV19,"Respond within 15 minutes or legal action may be taken against you.",suspicious,threats|urgency,threats_and_urgency
+ADV20,"Your payment will not be frozen if you ignore this unsolicited message.",benign,,negated_threats
 ADV21,"There is no requirement to act immediately; check your account using the official banking app.",benign,,negated_urgency
 ADV22,"Your account is safe, and no action is required today.",benign,,benign_reassurance
 ADV23,"I entered my password on a suspicious page last night and changed it afterward.",benign,,past_incident
 ADV24,"The caller asked for my card details, but I refused and ended the call.",benign,,refused_request
-ADV25,"Your account may be terminated unless you verify your details within 10 minutes.",suspicious,threat|urgency,threat_and_urgency
-ADV26,"Send your banking password now so we can prevent your account from being suspended.",suspicious,sensitive_information_request|urgency,request_with_threat_context
-ADV27,"Do not send your PIN to anyone. Your account will be blocked unless you provide it to this agent.",suspicious,sensitive_information_request|threat,mixed_safe_and_suspicious
+ADV25,"Your account may be terminated unless you verify your details within 10 minutes.",suspicious,threats|urgency,threats_and_urgency
+ADV26,"Send your banking password now so we can prevent your account from being suspended.",suspicious,sensitive_information_request|urgency,request_with_threats_context
+ADV27,"Do not send your PIN to anyone. Your account will be blocked unless you provide it to this agent.",suspicious,sensitive_information_request|threats,mixed_safe_and_suspicious
 ADV28,"This article explains that scammers often ask victims to disclose their OTP or banking password.",benign,,educational_mention
-ADV29,"Your account may be restricted, but you can verify this notice by contacting your bank through its official app.",suspicious,threat,threat_with_safe_advice
+ADV29,"Your account may be restricted, but you can verify this notice by contacting your bank through its official app.",suspicious,threats,threats_with_safe_advice
 ADV30,"Never share your password in a message. Please provide your password here right away to cancel the transfer.",suspicious,sensitive_information_request|urgency,mixed_intent
+FIN01,"Transfer $500 to this account to unlock your funds.",suspicious,transaction_request,direct_transfer_request
+FIN02,"Please pay the processing fee to receive your refund.",suspicious,transaction_request,processing_fee_request
+FIN03,"Deposit $200 into the following bank account.",suspicious,transaction_request,direct_deposit_request
+FIN04,"Buy gift cards and send us the codes to complete verification.",suspicious,transaction_request,gift_card_request
+FIN05,"I transferred $500 yesterday and received confirmation.",benign,,past_transaction
+FIN06,"Never transfer money to unknown bank accounts.",benign,,safety_warning
+FIN07,"Your salary payment has been received successfully.",benign,,payment_notification
+FIN08,"Transfer the money immediately or your account will be blocked.",suspicious,transaction_request|urgency|threats,combined_pressure
+FIN09,"Send $1,000 to this wallet within 10 minutes.",suspicious,transaction_request|urgency,crypto_or_wallet_transfer
+FIN10,"Pay the registration fee to activate your prize.",suspicious,transaction_request,registration_fee_request
+FIN11,"I received a request asking me to transfer money, but I ignored it.",benign,,reported_transaction_request
+FIN12,"Do not send money to anyone claiming to be a bank representative.",benign,,negated_transaction_request

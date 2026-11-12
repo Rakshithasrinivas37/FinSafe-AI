@@ -4,6 +4,7 @@ from backend.app.schemas.indicators import DetectedIndicator
 from backend.app.services.patterns.negation import NEGATION_PATTERNS
 from backend.app.services.patterns.sensitive_requests import SENSITIVE_REQUEST_PATTERNS
 from backend.app.services.patterns.threats import THREAT_PATTERNS
+from backend.app.services.patterns.transactions import FINANCIAL_TRANSACTION_PATTERNS
 from backend.app.services.patterns.urgency import URGENCY_PATTERNS
 from backend.app.services.text_preprocessing.clause_splitter import split_into_clauses
 from backend.app.services.text_preprocessing.reference_resolver import (
@@ -19,7 +20,10 @@ EDUCATIONAL_CONTEXT_PATTERNS = [
 
 REPORTING_CONTEXT_PATTERNS = [
     r"\b(?:the\s+)?(?:message|text|email|sms)\s+",
-    r"(?:says|said|reads|contains)\s*['\"]?\s*$"
+    r"(?:says|said|reads|contains)\s*['\"]?\s*$",
+    r"\b(?:i|we)\s+(?:received|got)\s+",
+    r"(?:a|the)\s+(?:message|request|email|text)\s+",   
+    r"(?:asking|telling|instructing)\s+(?:me|us)\s+to\b",
 ]
 
 
@@ -120,6 +124,43 @@ def extract_sensitive_information_requests(
                 )
 
     return detected_indicators
+
+
+def extract_financial_transaction_requests(
+    message: str,
+) -> list[DetectedIndicator]:
+
+    indicators = []
+
+    clauses = split_into_clauses(message)
+
+    for clause in clauses:
+        for pattern in FINANCIAL_TRANSACTION_PATTERNS:
+            for match in re.finditer(
+                pattern,
+                clause,
+                flags=re.IGNORECASE,
+            ):
+                if is_indicator_negated(clause, match.start()):
+                    continue
+
+                if is_reported_content(clause, match.start()):
+                    continue
+
+                if is_educational_context(clause):
+                    continue
+
+                if is_quoted_content(clause, match.start()):
+                    continue
+
+                indicators.append(
+                    DetectedIndicator(
+                        category="transaction_request",
+                        matched_text=match.group(0),
+                    )
+                )
+
+    return indicators
 
 
 def is_indicator_negated(clause: str, match_start: int) -> bool:
