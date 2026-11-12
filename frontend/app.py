@@ -46,7 +46,7 @@ if st.button("Analyse Message", type="primary"):
 
     else:
         try:
-            with st.spinner("Submitting your message..."):
+            with st.spinner("Analysing your message..."):
                 response = requests.post(
                     API_URL,
                     json={
@@ -62,37 +62,84 @@ if st.button("Analyse Message", type="primary"):
                 st.divider()
                 st.header("Analysis Result")
 
-                # Display API status
+                # 1. API status
                 status = result.get("status", "unknown")
 
                 if status == "completed":
                     st.success("Analysis completed successfully!")
-                elif status == "pending_implementation":
-                    st.info("Message received. Scam detection is not implemented yet.")
                 else:
                     st.warning(f"Analysis status: {status}")
 
-                # Display API message
-                st.subheader("Message")
-                st.write(result.get("message", "No message returned."))
+                # 2. Risk assessment
+                risk_assessment = result.get(
+                    "risk_assessment", {}
+                )
 
+                risk_level = risk_assessment.get(
+                    "risk_level", "unknown"
+                ).lower()
+
+                st.subheader("Risk Assessment")
+
+                if risk_level == "high":
+                    st.error("🔴 HIGH RISK")
+                elif risk_level == "medium":
+                    st.warning("🟠 MEDIUM RISK")
+                elif risk_level == "low":
+                    st.success("🟢 LOW RISK")
+                else:
+                    st.info("Risk level unavailable.")
+
+                st.write(
+                    risk_assessment.get(
+                        "explanation",
+                        "No risk explanation available.",
+                    )
+                )
+
+                # 3. Detected indicators
                 st.subheader("Detected Indicators")
 
                 indicators = result.get("indicators", [])
 
-                # Display indicators
                 if indicators:
                     for indicator in indicators:
+                        category = (
+                            indicator["category"]
+                            .replace("_", " ")
+                            .title()
+                        )
+
+                        matched_text = indicator["matched_text"]
+
                         st.warning(
-                            f"{indicator['category'].replace('_', ' ').title()}: "
-                            f"{indicator['matched_text']}"
+                            f"**{category}**: "
+                            f'"{matched_text}"'
                         )
                 else:
-                    st.info("No urgency indicators detected.")
+                    st.info("No known risk indicators detected.")
 
-                # Display analysis
-                st.subheader("Analysis")
-                st.write(result.get("analysis", "No analysis available."))
+                # 4. Risk reasons
+                st.subheader("Why was this risk level assigned?")
+
+                reasons = risk_assessment.get("reasons", [])
+
+                if reasons:
+                    for reason in reasons:
+                        st.markdown(f"- {reason}")
+                else:
+                    st.write("No specific reasons available.")
+
+                # 5. Safety disclaimer
+                st.divider()
+
+                st.caption(
+                    "Important: This is an automated preliminary "
+                    "assessment, not a definitive fraud verdict. "
+                    "A low-risk result does not guarantee that "
+                    "a message is legitimate. Verify requests "
+                    "through official channels."
+                )
 
             else:
                 st.error(
@@ -107,3 +154,9 @@ if st.button("Analyse Message", type="primary"):
 
         except requests.exceptions.Timeout:
             st.error("The backend request timed out.")
+
+        except requests.exceptions.RequestException:
+            st.error("An unexpected network error occurred.")
+
+        except ValueError:
+            st.error("The backend returned an invalid response.")
