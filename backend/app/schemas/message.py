@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field, field_validator
 
+from backend.app.schemas.indicators import DetectedIndicator
+
 
 class MessageAnalysisRequest(BaseModel):
     message: str = Field(
@@ -28,3 +30,4 @@ class MessageAnalysisResponse(BaseModel):
     status: str
     message: str
     analysis: str
+    indicators: list[DetectedIndicator] = Field(default_factory=list)
