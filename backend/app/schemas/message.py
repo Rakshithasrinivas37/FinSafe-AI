@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, field_validator
 
 from backend.app.schemas.indicators import DetectedIndicator
+from backend.app.schemas.risk import RiskAssessment
 
 
 class MessageAnalysisRequest(BaseModel):
@@ -31,3 +32,4 @@ class MessageAnalysisResponse(BaseModel):
     message: str
     analysis: str
     indicators: list[DetectedIndicator] = Field(default_factory=list)
+    risk_assessment: RiskAssessment

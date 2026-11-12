@@ -4,6 +4,7 @@ from backend.app.services.indicator_service import (
     extract_threat_indicators,
     extract_urgency_indicators,
 )
+from backend.app.services.risk_assessment.risk_assessor import assess_risk
 
 
 def analyze_message(request: MessageAnalysisRequest) -> MessageAnalysisResponse:
@@ -24,21 +25,13 @@ def analyze_message(request: MessageAnalysisRequest) -> MessageAnalysisResponse:
 
     indicators = urgency_indicators + threat_indicators + sensitive_information_indicators
 
-    # Step 2: Generate a basic analysis summary
-    if indicators:
-        analysis = (
-            "Urgency-related language was detected "
-            "in the submitted message."
-        )
-    else:
-        analysis = (
-            "No urgency-related language was detected."
-        )
+    risk_assessment = assess_risk(indicators)
 
     # Step 3: Return structured response
     return MessageAnalysisResponse(
         status="completed",
         message="Message analysis completed.",
-        analysis=analysis,
+        analysis=risk_assessment.explanation,
         indicators=indicators,
+        risk_assessment=risk_assessment
     )
