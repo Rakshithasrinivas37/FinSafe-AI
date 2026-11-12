@@ -1,0 +1,25 @@
+message_id,message,expected_label,expected_indicators,scenario
+S01,Your account will be blocked. Send your OTP immediately.,suspicious,threat|sensitive_information_request|urgency,Account-blocking threat combined with an OTP request and immediate pressure
+S02,Your account may be suspended unless you provide your PIN within 2 hours.,suspicious,threat|sensitive_information_request|urgency,Suspension warning with a PIN request and a time limit
+S03,Payment will be frozen unless you enter your banking password right away.,suspicious,threat|sensitive_information_request|urgency,Payment-freeze threat with a banking-password request
+S04,Legal action will be taken unless you disclose your credit card details urgently.,suspicious,threat|sensitive_information_request|urgency,Legal threat with a card-details request and urgency
+S05,Access may be restricted. Reveal your CVV now.,suspicious,threat|sensitive_information_request,Access restriction threat with a CVV request
+S06,Your account has been terminated. Share your OTP without delay.,suspicious,threat|sensitive_information_request|urgency,Account-termination claim with an OTP request
+S07,Your account will be suspended unless you enter your PIN immediately.,suspicious,threat|sensitive_information_request|urgency,Suspension threat with a PIN request
+S08,Payment will be frozen. Provide your debit card details within 30 minutes.,suspicious,threat|sensitive_information_request|urgency,Payment-freeze threat with a debit-card-details request
+S09,Legal action may be taken unless you provide your banking credentials urgently.,suspicious,threat|sensitive_information_request|urgency,Legal-action threat with a banking-credentials request
+S10,Your account has been blocked. Disclose your password right away.,suspicious,threat|sensitive_information_request|urgency,Blocked-account claim with a password request
+S11,Access will be restricted unless you share your OTP within 10 minutes.,suspicious,threat|sensitive_information_request|urgency,Access-restriction threat with an OTP request and deadline
+S12,Payment will be frozen. Enter your CVV immediately.,suspicious,threat|sensitive_information_request|urgency,Payment-freeze threat with a CVV request
+B01,Never share your OTP with anyone; your bank will never ask for it.,benign,,Direct safety warning against sharing an OTP
+B02,Do not provide your PIN to anyone who contacts you unexpectedly.,benign,,Safety advice using a sensitive-information keyword
+B03,Your bank will never ask you to share your OTP.,benign,,Statement explaining legitimate bank behaviour
+B04,I accidentally shared my OTP yesterday and contacted my bank.,benign,,"Incident report describing a past action, not a request"
+B05,The security guide says to never enter your password from a link in a message.,benign,,Security guidance warning against entering a password
+B06,You should not disclose your CVV to anyone.,benign,,Negative instruction about disclosing card security details
+B07,Your account will not be blocked if you ignore this unsolicited message.,benign,,Reassurance that contradicts an account-blocking threat
+B08,The bank confirmed that no legal action will be taken.,benign,,Reassuring statement containing legal-action vocabulary
+B09,Do not act immediately just because a message claims your account is at risk.,benign,,Advice against reacting urgently; tests urgency negation
+B10,There is no need to respond right away; verify using the official app.,benign,,Advice that explicitly removes time pressure; tests urgency context
+B11,"The message says 'send your OTP', but this is an example of a scam tactic; never follow it.",benign,,Educational discussion quoting a suspicious request
+B12,"I received a request for my PIN, but I did not share it with anyone.",benign,,Incident report about receiving a request without complying
