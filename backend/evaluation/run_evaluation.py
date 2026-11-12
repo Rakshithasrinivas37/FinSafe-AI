@@ -1,7 +1,7 @@
 
+import argparse
 import csv
 from pathlib import Path
-import argparse
 
 from backend.app.services.indicator_service import (
     extract_sensitive_information_requests,
