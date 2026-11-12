@@ -1,10 +1,9 @@
 import re
 
 from backend.app.schemas.indicators import DetectedIndicator
-
+from backend.app.services.patterns.sensitive_requests import SENSITIVE_REQUEST_PATTERNS
 from backend.app.services.patterns.threats import THREAT_PATTERNS
 from backend.app.services.patterns.urgency import URGENCY_PATTERNS
-from backend.app.services.patterns.sensitive_requests import SENSITIVE_REQUEST_PATTERNS
 
 
 def extract_urgency_indicators(

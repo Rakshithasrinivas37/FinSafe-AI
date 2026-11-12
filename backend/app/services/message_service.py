@@ -1,5 +1,9 @@
 from backend.app.schemas.message import MessageAnalysisRequest, MessageAnalysisResponse
-from backend.app.services.indicator_service import extract_urgency_indicators, extract_threat_indicators, extract_sensitive_information_requests
+from backend.app.services.indicator_service import (
+    extract_sensitive_information_requests,
+    extract_threat_indicators,
+    extract_urgency_indicators,
+)
 
 
 def analyze_message(request: MessageAnalysisRequest) -> MessageAnalysisResponse:

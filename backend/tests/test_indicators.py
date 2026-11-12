@@ -1,8 +1,9 @@
 from backend.app.services.indicator_service import (
-    extract_urgency_indicators,
+    extract_sensitive_information_requests,
     extract_threat_indicators,
-    extract_sensitive_information_requests
+    extract_urgency_indicators,
 )
+
 
 def test_detect_immediately():
 
@@ -27,7 +28,7 @@ def test_detect_multiple_urgency_indicators():
     assert len(result) == 2
 
 
-def test_case_insensitive_detection():
+def test_case_insensitive_urgency_detection():
 
     message = "ACT NOW to verify your account."
 
@@ -96,7 +97,7 @@ def test_no_threat_detected():
     assert len(result) == 0
 
 
-def test_case_insensitive_detection():
+def test_case_insensitive_threat_detection():
     result = extract_threat_indicators(
         "YOUR ACCOUNT WILL BE BLOCKED."
     )
@@ -145,7 +146,7 @@ def test_no_sensitive_request():
     assert len(result) == 0
 
 
-def test_case_insensitive_detection():
+def test_case_insensitive_sensitive_info_detection():
     result = extract_sensitive_information_requests(
         "SEND YOUR OTP."
     )
