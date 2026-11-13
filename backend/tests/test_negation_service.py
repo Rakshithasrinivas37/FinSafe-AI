@@ -1,10 +1,11 @@
 import pytest
 
-from backend.app.services.negation_service import is_action_negated
-from backend.app.services.negation_service import find_action_start
 from backend.app.services.negation_service import (
+    find_action_start,
+    is_action_negated,
     is_matched_action_negated,
 )
+
 
 def test_find_action_start_for_direct_request():
     message = "Send me your OTP."
