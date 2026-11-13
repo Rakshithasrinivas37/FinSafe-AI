@@ -11,6 +11,9 @@ from backend.app.services.text_preprocessing.clause_splitter import split_into_c
 from backend.app.services.text_preprocessing.reference_resolver import (
     resolve_sensitive_references,
 )
+from backend.app.services.negation_service import (
+    is_matched_action_negated,
+)
 
 EDUCATIONAL_CONTEXT_PATTERNS = [
     r"\b(?:scammers?|fraudsters?|criminals?|attackers?)\b",
@@ -110,7 +113,7 @@ def extract_sensitive_information_requests(
 
             for match in matches:
                 if (
-                    is_sensitive_request_negated(clause, match.start()) 
+                    is_matched_action_negated(clause, match.start(), match.end()) 
                     or is_reported_content(clause, match.start())
                     or is_quoted_content(clause, match.start())
                     or is_educational_context(clause)
@@ -210,31 +213,6 @@ def is_indicator_negated(clause: str, match_start: int) -> bool:
             return True
 
     return False
-
-
-def is_sensitive_request_negated(
-    clause: str,
-    match_start: int,
-) -> bool:
-    preceding_text = clause[:match_start]
-
-    # Negation applies to "delay", not the following request.
-    if re.search(
-        r"\b(?:do not|don't|never)\s+delay\s+and\s*$",
-        preceding_text,
-        flags=re.IGNORECASE,
-    ):
-        return False
-
-    # Negation applies to "hesitate", not the following request.
-    if re.search(
-        r"\b(?:do not|don't|never)\s+hesitate\s+to\s*$",
-        preceding_text,
-        flags=re.IGNORECASE,
-    ):
-        return False
-
-    return is_indicator_negated(clause, match_start)
 
 
 def is_reported_content(clause: str, match_start: int) -> bool:

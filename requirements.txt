@@ -7,3 +7,4 @@ ruff
 streamlit
 requests
 python-dotenv
+spacy
