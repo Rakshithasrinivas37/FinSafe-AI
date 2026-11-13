@@ -41,3 +41,11 @@ FIN09,"Send $1,000 to this wallet within 10 minutes.",suspicious,transaction_req
 FIN10,"Pay the registration fee to activate your prize.",suspicious,transaction_request,registration_fee_request
 FIN11,"I received a request asking me to transfer money, but I ignored it.",benign,,reported_transaction_request
 FIN12,"Do not send money to anyone claiming to be a bank representative.",benign,,negated_transaction_request
+SEC01,"Keep this transaction secret.",suspicious,secrecy_request,direct_secrecy_request
+SEC02,"Do not inform your bank about this transfer.",suspicious,secrecy_request,prevent_bank_contact
+SEC03,"Never tell anyone about this payment.",suspicious,secrecy_request,prevent_disclosure
+SEC04,"Do not discuss this transaction.",suspicious,secrecy_request,prevent_transaction_discussion
+SEC05,"Keep this conversation confidential.",suspicious,secrecy_request,confidentiality_request
+SEC06,"There is no need to keep this transaction secret.",benign,,negated_secrecy_request
+SEC07,"I received a message asking me to keep the transfer secret.",benign,,reported_secrecy_request
+SEC08,"Scammers often tell victims to keep the transaction confidential.",benign,,educational_secrecy_example

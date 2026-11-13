@@ -1,4 +1,3 @@
-
 from backend.app.schemas.indicators import DetectedIndicator
 from backend.app.schemas.risk import RiskAssessment
 
@@ -18,6 +17,7 @@ def assess_risk(
     has_financial_transaction = (
         "transaction_request" in categories
     )
+    has_secrecy_request = "secrecy_request" in categories
 
     if has_sensitive_request:
         reasons.append(
@@ -42,16 +42,37 @@ def assess_risk(
             "such as transferring money or making a payment."
         )
 
-    if has_sensitive_request or has_threat and (
-        has_urgency or has_financial_transaction
+    if has_secrecy_request:
+        reasons.append(
+            "The message encourages secrecy or discourages "
+            "the recipient from discussing the request with others."
+        )
+
+    # High-risk conditions
+    if (
+        has_sensitive_request
+        or (
+            has_threat
+            and (has_urgency or has_financial_transaction)
+        )
+        or (
+            has_secrecy_request
+            and (
+                has_urgency
+                or has_threat
+                or has_financial_transaction
+            )
+        )
     ):
         risk_level = "high"
 
-    elif has_financial_transaction and has_urgency or has_threat:
+    # Medium-risk conditions
+    elif (
+        has_secrecy_request
+        or has_threat
+        or (has_financial_transaction and has_urgency)
+    ):
         risk_level = "medium"
-
-    elif has_urgency:
-        risk_level = "low"
 
     else:
         risk_level = "low"
@@ -66,8 +87,9 @@ def assess_risk(
     elif risk_level == "medium":
         explanation = (
             "The message contains potentially concerning "
-            "language. Verify the request through an official "
-            "channel before making a payment or responding."
+            "language, such as secrecy instructions or threats. "
+            "Verify the request through an official channel "
+            "before responding or making a payment."
         )
 
     elif has_financial_transaction:

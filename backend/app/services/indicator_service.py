@@ -2,6 +2,7 @@ import re
 
 from backend.app.schemas.indicators import DetectedIndicator
 from backend.app.services.patterns.negation import NEGATION_PATTERNS
+from backend.app.services.patterns.secrecy import SECRECY_PATTERNS
 from backend.app.services.patterns.sensitive_requests import SENSITIVE_REQUEST_PATTERNS
 from backend.app.services.patterns.threats import THREAT_PATTERNS
 from backend.app.services.patterns.transactions import FINANCIAL_TRANSACTION_PATTERNS
@@ -109,7 +110,7 @@ def extract_sensitive_information_requests(
 
             for match in matches:
                 if (
-                    is_indicator_negated(clause, match.start()) 
+                    is_sensitive_request_negated(clause, match.start()) 
                     or is_reported_content(clause, match.start())
                     or is_quoted_content(clause, match.start())
                     or is_educational_context(clause)
@@ -163,6 +164,40 @@ def extract_financial_transaction_requests(
     return indicators
 
 
+def extract_secrecy_indicators(message: str) -> list[DetectedIndicator]:
+    indicators = []
+    clauses = split_into_clauses(message)
+
+    for clause in clauses:
+        for pattern in SECRECY_PATTERNS:
+            for match in re.finditer(
+                pattern,
+                clause,
+                re.IGNORECASE,
+            ):
+                if is_indicator_negated(clause, match.start()):
+                    continue
+
+                if is_reported_content(clause, match.start()):
+                    continue
+
+                if is_educational_context(clause):
+                    continue
+
+                if is_quoted_content(clause, match.start()):
+                    continue
+
+                indicator = DetectedIndicator(
+                    category="secrecy_request",
+                    matched_text=match.group(0),
+                )
+
+                if indicator not in indicators:
+                    indicators.append(indicator)
+
+    return indicators
+
+
 def is_indicator_negated(clause: str, match_start: int) -> bool:
     preceding_text = clause[:match_start]
 
@@ -175,6 +210,31 @@ def is_indicator_negated(clause: str, match_start: int) -> bool:
             return True
 
     return False
+
+
+def is_sensitive_request_negated(
+    clause: str,
+    match_start: int,
+) -> bool:
+    preceding_text = clause[:match_start]
+
+    # Negation applies to "delay", not the following request.
+    if re.search(
+        r"\b(?:do not|don't|never)\s+delay\s+and\s*$",
+        preceding_text,
+        flags=re.IGNORECASE,
+    ):
+        return False
+
+    # Negation applies to "hesitate", not the following request.
+    if re.search(
+        r"\b(?:do not|don't|never)\s+hesitate\s+to\s*$",
+        preceding_text,
+        flags=re.IGNORECASE,
+    ):
+        return False
+
+    return is_indicator_negated(clause, match_start)
 
 
 def is_reported_content(clause: str, match_start: int) -> bool:
