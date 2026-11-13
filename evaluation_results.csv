@@ -41,3 +41,11 @@ FIN09,suspicious,suspicious,transaction_request|urgency,transaction_request|urge
 FIN10,suspicious,suspicious,transaction_request,transaction_request,True
 FIN11,benign,benign,,,True
 FIN12,benign,benign,,,True
+SEC01,suspicious,suspicious,secrecy_request,secrecy_request,True
+SEC02,suspicious,suspicious,secrecy_request,secrecy_request,True
+SEC03,suspicious,suspicious,secrecy_request,secrecy_request,True
+SEC04,suspicious,suspicious,secrecy_request,secrecy_request,True
+SEC05,suspicious,suspicious,secrecy_request,secrecy_request,True
+SEC06,benign,benign,,,True
+SEC07,benign,benign,,,True
+SEC08,benign,benign,,,True

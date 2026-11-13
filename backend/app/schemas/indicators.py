@@ -9,5 +9,6 @@ class DetectedIndicator(BaseModel):
         "threats", 
         "sensitive_information_request", 
         "transaction_request",
+        "secrecy_request"
         ]
     matched_text: str

@@ -110,3 +110,68 @@ def test_financial_transaction_with_threat_is_high_risk():
 
     assert result.risk_level == "high"
 
+
+def test_secrecy_request_alone_is_medium_risk():
+    indicators = [
+        DetectedIndicator(
+            category="secrecy_request",
+            matched_text="Keep this transaction secret",
+        )
+    ]
+
+    result = assess_risk(indicators)
+
+    assert result.risk_level == "medium"
+
+
+def test_secrecy_and_transaction_request_is_high_risk():
+    indicators = [
+        DetectedIndicator(
+            category="secrecy_request",
+            matched_text="Keep this transaction secret",
+        ),
+        DetectedIndicator(
+            category="transaction_request",
+            matched_text="Transfer $500",
+        ),
+    ]
+
+    result = assess_risk(indicators)
+
+    assert result.risk_level == "high"
+
+
+def test_secrecy_and_urgency_is_high_risk():
+    indicators = [
+        DetectedIndicator(
+            category="secrecy_request",
+            matched_text="Do not tell anyone",
+        ),
+        DetectedIndicator(
+            category="urgency",
+            matched_text="immediately",
+        ),
+    ]
+
+    result = assess_risk(indicators)
+
+    assert result.risk_level == "high"
+
+
+def test_secrecy_and_threat_is_high_risk():
+    indicators = [
+        DetectedIndicator(
+            category="secrecy_request",
+            matched_text="Do not inform your bank",
+        ),
+        DetectedIndicator(
+            category="threats",
+            matched_text="account will be blocked",
+        ),
+    ]
+
+    result = assess_risk(indicators)
+
+    assert result.risk_level == "high"
+
+

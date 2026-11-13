@@ -6,3 +6,4 @@ pytest
 ruff
 streamlit
 requests
+python-dotenv

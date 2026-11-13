@@ -90,6 +90,19 @@ if st.button("Analyse Message", type="primary"):
                 else:
                     st.info("Risk level unavailable.")
 
+                # 2.1 AI-generated analysis
+                st.subheader("AI-Powered Analysis")
+
+                analysis = result.get("analysis", "")
+
+                if analysis:
+                    st.markdown(analysis)
+                else:
+                    st.info("AI-generated explanation is unavailable.")
+
+                # 2.2 Deterministic risk explanation
+                st.subheader("Rule-Based Risk Assessment")
+
                 st.write(
                     risk_assessment.get(
                         "explanation",

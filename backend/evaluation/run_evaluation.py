@@ -5,6 +5,7 @@ from pathlib import Path
 
 from backend.app.services.indicator_service import (
     extract_financial_transaction_requests,
+    extract_secrecy_indicators,
     extract_sensitive_information_requests,
     extract_threat_indicators,
     extract_urgency_indicators,
@@ -18,6 +19,7 @@ DEFAULT_DATASET = (
 
 INDICATOR_FUNCTIONS = {
     "urgency": extract_urgency_indicators,
+    "secrecy_request": extract_secrecy_indicators,
     "threats": extract_threat_indicators,
     "sensitive_information_request": (
         extract_sensitive_information_requests

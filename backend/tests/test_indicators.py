@@ -1,4 +1,7 @@
+import pytest
+
 from backend.app.services.indicator_service import (
+    extract_secrecy_indicators,
     extract_sensitive_information_requests,
     extract_threat_indicators,
     extract_urgency_indicators,
@@ -186,3 +189,38 @@ def test_positive_request_is_still_detected():
         "Please share your OTP immediately."
     )
     assert len(result) == 1
+
+@pytest.mark.parametrize(
+    "message",
+    [
+        "Keep this transaction secret.",
+        "Do not inform your bank about this transfer.",
+        "Never tell anyone about this payment.",
+        "Do not discuss this transaction.",
+    ],
+)
+def test_detect_secrecy_requests(message):
+    indicators = extract_secrecy_indicators(message)
+
+    assert any(
+        indicator.category == "secrecy_request"
+        for indicator in indicators
+    )
+
+
+@pytest.mark.parametrize(
+    "message",
+    [
+        "There is no need to keep this transaction secret.",
+        "I received a message asking me to keep the transfer secret.",
+        "Scammers often tell victims to keep transactions confidential.",
+        "Never share your banking password with anyone.",
+    ],
+)
+def test_ignore_non_secrecy_requests(message):
+    indicators = extract_secrecy_indicators(message)
+
+    assert not any(
+        indicator.category == "secrecy_request"
+        for indicator in indicators
+    )
